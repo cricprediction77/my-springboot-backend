@@ -15,9 +15,12 @@ public class SecurityConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
+                                "https://cricprediction77.com",
+                                "https://www.cricprediction77.com",
                                 "https://cricprediction77-fe.onrender.com",
                                 "http://localhost:3000"
                         )
+
                         .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
                         .allowedHeaders("*")
                         .exposedHeaders("Authorization", "Content-Disposition")
