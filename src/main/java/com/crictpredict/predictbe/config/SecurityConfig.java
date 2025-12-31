@@ -11,16 +11,17 @@ public class SecurityConfig {
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
-
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedOrigins(
+                                "https://cricprediction77-fe.onrender.com",
+                                "http://localhost:3000"
+                        )
+                        .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true)
-                        .maxAge(3600);
+                        .exposedHeaders("Authorization", "Content-Disposition")
+                        .allowCredentials(true);
             }
         };
     }
