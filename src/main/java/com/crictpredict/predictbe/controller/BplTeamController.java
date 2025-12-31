@@ -20,7 +20,7 @@ public class BplTeamController {
 
     // ✅ UPDATED MATCHES API
     @GetMapping("/bpl-matches")
-    public BplMatchesResponseDto getBplMatchesWithTeams() {
+    public BplMatchesResponseDto<BplTeam> getBplMatchesWithTeams() {
         return service.getBplMatchesWithTeams();
     }
 

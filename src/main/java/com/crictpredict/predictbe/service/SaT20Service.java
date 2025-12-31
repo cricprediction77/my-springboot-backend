@@ -4,10 +4,10 @@ import com.crictpredict.predictbe.dto.BplMatchDto;
 import com.crictpredict.predictbe.dto.BplMatchUpdateRequestDto;
 import com.crictpredict.predictbe.dto.BplMatchesResponseDto;
 import com.crictpredict.predictbe.dto.SessionDetailDto;
-import com.crictpredict.predictbe.entity.Bpl20252026Match;
-import com.crictpredict.predictbe.entity.BplTeam;
-import com.crictpredict.predictbe.repository.Bpl20252026MatchRepository;
-import com.crictpredict.predictbe.repository.BplTeamRepository;
+import com.crictpredict.predictbe.entity.SaT202026Match;
+import com.crictpredict.predictbe.entity.SaT20Team;
+import com.crictpredict.predictbe.repository.SaT202026MatchRepository;
+import com.crictpredict.predictbe.repository.SaT20TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,25 +16,25 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BplTeamService {
+public class SaT20Service {
 
     @Autowired
-    private BplTeamRepository repository;
+    private SaT20TeamRepository teamRepository;
 
     @Autowired
-    private Bpl20252026MatchRepository matchRepository;
+    private SaT202026MatchRepository matchRepository;
 
-    public BplMatchesResponseDto<BplTeam> getBplMatchesWithTeams() {
+    // ✅ GET ALL MATCHES + TEAMS
+    public BplMatchesResponseDto<SaT20Team> getSaT20MatchesWithTeams() {
 
-
-        List<Bpl20252026Match> matches = matchRepository.findAll();
-        List<BplTeam> teams = repository.findAll();
+        List<SaT202026Match> matches = matchRepository.findAll();
+        List<SaT20Team> teams = teamRepository.findAll();
 
         List<BplMatchDto> matchDtos = matches.stream()
                 .map(this::mapToMatchDto)
                 .toList();
 
-        BplMatchesResponseDto response = new BplMatchesResponseDto();
+        BplMatchesResponseDto<SaT20Team> response = new BplMatchesResponseDto<>();
         response.setMatches(matchDtos);
         response.setTeams(teams);
 
@@ -43,7 +43,7 @@ public class BplTeamService {
 
     // ---------------- HELPERS ----------------
 
-    private BplMatchDto mapToMatchDto(Bpl20252026Match match) {
+    private BplMatchDto mapToMatchDto(SaT202026Match match) {
 
         BplMatchDto dto = new BplMatchDto();
 
@@ -52,8 +52,8 @@ public class BplTeamService {
         dto.setTeams(match.getTeams());
         dto.setApproxStartTime(match.getApproxStartTime());
 
-        dto.setTossWinner(match.getTossWinner());   // ✅ FIX
-        dto.setMatchWinner(match.getMatchWinner()); // ✅ FIX
+        dto.setTossWinner(match.getTossWinner());
+        dto.setMatchWinner(match.getMatchWinner());
 
         dto.setLeagueType(match.getLeagueType());
         dto.setMatchStatus(match.getMatchStatus());
@@ -84,34 +84,28 @@ public class BplTeamService {
         }
         return list;
     }
+
+    // ✅ UPDATE MATCH DETAILS (POST API)
     public void updateMatchDetails(BplMatchUpdateRequestDto request) {
 
-        try {
-            Optional<Bpl20252026Match> optionalMatch =
-                    matchRepository.findByMatchNumber(request.getMatchNumber());
+        Optional<SaT202026Match> optionalMatch =
+                matchRepository.findByMatchNumber(request.getMatchNumber());
 
-            if (optionalMatch.isEmpty()) {
-                throw new RuntimeException(
-                        "Match not found for match number: " + request.getMatchNumber()
-                );
-            }
-
-            Bpl20252026Match match = optionalMatch.get();
-
-            // ✅ Update only fields coming from payload
-            match.setTossWinner(request.getTossWinner());
-            match.setMatchWinner(request.getMatchWinner());
-            match.setTeam1Score(request.getTeam1Score());
-            match.setTeam2Score(request.getTeam2Score());
-            match.setSessionDetails(request.getSessionDetails());
-            match.setMatchStatus(request.getMatchStatus()); // COMPLETED
-
-            matchRepository.save(match);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error updating match details", e);
+        if (optionalMatch.isEmpty()) {
+            throw new RuntimeException(
+                    "Match not found for match number: " + request.getMatchNumber()
+            );
         }
+
+        SaT202026Match match = optionalMatch.get();
+
+        match.setTossWinner(request.getTossWinner());
+        match.setMatchWinner(request.getMatchWinner());
+        match.setTeam1Score(request.getTeam1Score());
+        match.setTeam2Score(request.getTeam2Score());
+        match.setSessionDetails(request.getSessionDetails());
+        match.setMatchStatus(request.getMatchStatus());
+
+        matchRepository.save(match);
     }
-
 }
-
