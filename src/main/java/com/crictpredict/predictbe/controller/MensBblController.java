@@ -16,7 +16,7 @@ public class MensBblController {
     }
 
     // ✅ GET ALL MATCHES + TEAMS
-    @GetMapping("/matches")
+    @GetMapping("/bbl-matches")
     public BplMatchesResponseDto getMensBblMatchesWithTeams() {
         return service.getMensBblMatchesWithTeams();
     }

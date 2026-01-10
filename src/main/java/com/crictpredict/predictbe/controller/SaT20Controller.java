@@ -17,7 +17,7 @@ public class SaT20Controller {
     }
 
     // ✅ GET ALL MATCHES + TEAMS
-    @GetMapping("/matches")
+    @GetMapping("/sat20-matches")
     public BplMatchesResponseDto<SaT20Team> getSaT20Matches() {
         return service.getSaT20MatchesWithTeams();
     }

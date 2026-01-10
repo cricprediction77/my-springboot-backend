@@ -11,6 +11,7 @@ import com.crictpredict.predictbe.repository.MensBbl20252026MatchRepository;
 import com.crictpredict.predictbe.repository.MensBblTeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,9 @@ public class MensBblService {
     // ✅ GET ALL MATCHES + TEAMS
     public BplMatchesResponseDto getMensBblMatchesWithTeams() {
 
-        List<MensBbl20252026Match> matches = matchRepository.findAll();
+        List<MensBbl20252026Match> matches =
+                matchRepository.findAll(Sort.by(Sort.Direction.ASC, "matchNumber"));
+
         List<MensBblTeam> mensBblTeams = teamRepository.findAll();
 
         // 🔹 Convert MensBblTeam -> BplTeam

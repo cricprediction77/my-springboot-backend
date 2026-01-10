@@ -10,6 +10,7 @@ import com.crictpredict.predictbe.repository.Bpl20252026MatchRepository;
 import com.crictpredict.predictbe.repository.BplTeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,12 @@ public class BplTeamService {
     @Autowired
     private Bpl20252026MatchRepository matchRepository;
 
+
     public BplMatchesResponseDto<BplTeam> getBplMatchesWithTeams() {
 
+        List<Bpl20252026Match> matches =
+                matchRepository.findAll(Sort.by(Sort.Direction.ASC, "matchNumber"));
 
-        List<Bpl20252026Match> matches = matchRepository.findAll();
         List<BplTeam> teams = repository.findAll();
 
         List<BplMatchDto> matchDtos = matches.stream()

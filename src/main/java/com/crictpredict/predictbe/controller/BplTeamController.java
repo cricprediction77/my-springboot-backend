@@ -4,6 +4,7 @@ import com.crictpredict.predictbe.dto.BplMatchUpdateRequestDto;
 import com.crictpredict.predictbe.dto.BplMatchesResponseDto;
 import com.crictpredict.predictbe.entity.BplTeam;
 import com.crictpredict.predictbe.service.BplTeamService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,15 +26,9 @@ public class BplTeamController {
     }
 
     @PostMapping("/details")
-    public String updateBplMatchDetails(
-            @RequestBody BplMatchUpdateRequestDto request
-    ) {
-        try {
-            service.updateMatchDetails(request);
-            return "Match details submitted successfully";
-        } catch (Exception e) {
-            return "Failed to submit match details: " + e.getMessage();
-        }
+    public ResponseEntity<String> updateBplMatchDetails(@RequestBody BplMatchUpdateRequestDto request) {
+        service.updateMatchDetails(request);
+        return ResponseEntity.ok("Match details submitted successfully");
     }
 
 }
