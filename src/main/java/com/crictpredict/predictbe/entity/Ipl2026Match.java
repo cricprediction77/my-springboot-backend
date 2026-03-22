@@ -40,7 +40,7 @@ public class Ipl2026Match {
     private String matchWinner;
 
     @Column(name = "team1_score")
-    private String tam1Score;
+    private String team1Score;
 
     @Column(name = "team2_score")
     private String team2Score;
