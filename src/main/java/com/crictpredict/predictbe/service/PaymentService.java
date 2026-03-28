@@ -14,15 +14,25 @@ public class PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public void savePayment(PaymentDetails payment) {
+    public void savePayment(PaymentDetails payment, String userIp) {
 
         // 🔥 CHECK DUPLICATE UTR
         if (paymentRepository.existsByUtrId(payment.getUtrId())) {
             throw new RuntimeException("UTR_ALREADY_EXISTS");
         }
 
+        // 🔥 TERMS VALIDATION
+        if (!Boolean.TRUE.equals(payment.getTermsAccepted())) {
+            throw new RuntimeException("TERMS_NOT_ACCEPTED");
+        }
+
         payment.setStatus("PENDING");
         payment.setCreatedAt(LocalDateTime.now());
+        payment.setTermsAcceptedAt(LocalDateTime.now());
+
+        // ✅ SAVE USER IP
+        payment.setUserIp(userIp);
+
         paymentRepository.save(payment);
     }
 

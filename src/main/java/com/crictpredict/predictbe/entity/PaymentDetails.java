@@ -29,4 +29,10 @@ public class PaymentDetails {
     private String status; // PENDING / VERIFIED
 
     private LocalDateTime createdAt;
+
+    private Boolean termsAccepted;
+
+    private LocalDateTime termsAcceptedAt;
+
+    private String userIp;
 }
