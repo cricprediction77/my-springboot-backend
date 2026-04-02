@@ -3,12 +3,14 @@ package com.crictpredict.predictbe.service;
 import com.crictpredict.predictbe.dto.IplMatchDto;
 import com.crictpredict.predictbe.dto.IplMatchUpdateRequestDto;
 import com.crictpredict.predictbe.dto.IplMatchesResponseDto;
+import com.crictpredict.predictbe.dto.SessionDetailDto;
 import com.crictpredict.predictbe.entity.Ipl2026Match;
 import com.crictpredict.predictbe.repository.Ipl2026MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,6 +51,7 @@ public class IplService {
     }
 
     private IplMatchDto mapToDto(Ipl2026Match match) {
+
         IplMatchDto dto = new IplMatchDto();
 
         dto.setMatchNumber(match.getMatchNumber());
@@ -64,8 +67,29 @@ public class IplService {
         dto.setTeam2Score(match.getTeam2Score());
         dto.setMatchStatus(match.getMatchStatus());
 
-        dto.setSessionDetails(null); // same as WPL logic if needed
+        // ✅ FIX HERE
+        dto.setSessionDetails(parseSessionDetails(match.getSessionDetails()));
 
         return dto;
+    }
+
+    private List<SessionDetailDto> parseSessionDetails(String sessionDetails) {
+
+        if (sessionDetails == null || sessionDetails.isEmpty()) {
+            return List.of();
+        }
+
+        List<SessionDetailDto> list = new ArrayList<>();
+
+        String[] lines = sessionDetails.split("\\n");
+
+        for (int i = 0; i < lines.length - 1; i += 2) {
+            String sessionText = lines[i].trim();
+            String updatedAt = lines[i + 1].trim();
+
+            list.add(new SessionDetailDto(sessionText, updatedAt));
+        }
+
+        return list;
     }
 }
