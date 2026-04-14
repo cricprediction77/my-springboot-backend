@@ -12,7 +12,7 @@ public class CounterScheduler {
     private CounterService counterService;
 
     // Every 1 hour
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "*/30 * * * * *")
     public void runEveryHour() {
         counterService.updateCounter();
     }
