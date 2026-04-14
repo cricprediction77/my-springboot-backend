@@ -40,7 +40,7 @@ public class CounterService {
             counter.setLastUpdatedDate(LocalDate.now());
         }
 
-        int random = new Random().nextInt(101); // 0–31
+        int random = new Random().nextInt(31); // 0–31
 
         counter.setLastGeneratedCount(random);
         counter.setTodayCount(counter.getTodayCount() + random);
